@@ -26,7 +26,7 @@ while True:
     for t in targets:
         order_seen = 0
         res = []
-        tid = targets[t]['type_id']
+        tid = t
         name = targets[t]['name']
         thres = targets[t]['threshold']
         logging.info(f'Looking for {name} below {thres:,} isk')
