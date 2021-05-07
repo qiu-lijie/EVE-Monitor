@@ -3,6 +3,7 @@ import json
 import time
 import logging
 import datetime
+from plyer import notification
 
 from market_monitor import get_item_orders_in_region, get_system_name
 import keys as k
@@ -47,12 +48,18 @@ while True:
 
         if order_seen == 0:
             logging.warning(f'Done looking for {name}, no order found')
-        for r in res:
+
+        title = 'EVE Market Monitor'
+        for msg in res:
+            # desktop notification
+            notification.notify(title=title, message=msg, app_name=title,)
+            
+            # pushover notification
             data = {
                 'token' : APP_TOKEN,
                 'user' : USER_KEY,
                 'title': 'EVE Market Monitor',
-                'message': r,
+                'message': msg,
                 'priority': 0,
             }
             r = s.post('https://api.pushover.net/1/messages.json', data=data)
