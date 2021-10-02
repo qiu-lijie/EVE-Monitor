@@ -21,7 +21,7 @@ regions = json.load(open(REGIONS_LST))
 
 while True:
     # load targets each iteration to allow chnages
-    targets = json.load(open(TARGETS_LST))
+    targets = json.load(open(TARGETS_LST))['market_monitor']
     s = requests.Session()
 
     for t in targets:

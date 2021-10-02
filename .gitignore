@@ -1,4 +1,7 @@
 __pycache__/
+.vscode/
 
 targets.json
 keys.py
+schema.yaml
+temp.py
