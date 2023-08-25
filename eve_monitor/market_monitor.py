@@ -1,11 +1,9 @@
 import logging
 import json
 import requests
-import traceback
-import sys
-from plyer import notification
 
-from constants import TITLE, ESI_URL, PUSHOVER_URL, TARGETS_JSON, APP_TOKEN, USER_KEY, REGIONS
+from .constants import ESI_URL, TARGETS_JSON, REGIONS
+from .notification import send_notification
 
 
 def get_region_info(s=None):
@@ -99,30 +97,5 @@ def watch_market(s: requests.Session):
             logging.warning(f'Done looking for {name}, no order found')
 
         for msg in res:
-            # desktop notification
-            try:
-                if sys.platform.startswith('win'):
-                    notification.notify(title=TITLE, message=msg, app_name=TITLE,)
-                # TODO add mac support
-                else:
-                    logging.warning('No supported desktop notification implementation found')
-            except:
-                logging.error('Unable to send desktop notification')
-                traceback.print_exc()
-
-            # pushover notification
-            try:
-                data = {
-                    'token' : APP_TOKEN,
-                    'user' : USER_KEY,
-                    'title': TITLE,
-                    'message': msg,
-                    'priority': 0,
-                }
-                r = s.post(PUSHOVER_URL, data=data)
-                if r.status_code != 200:
-                    raise Exception(f'Status code {r.status_code}, {r.content}')
-            except:
-                logging.error('Unable to send pushover notification')
-                traceback.print_exc()
+            send_notification(s, msg)
     return
