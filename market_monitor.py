@@ -1,11 +1,9 @@
 import requests
 import json
-import baker
 
 ESI_URL = 'https://esi.evetech.net/latest'
 # DATASOURCE = 'tranquility'
 
-@baker.command
 def get_region_info(s=None):
     """
     Get the region info, save to regions.json
@@ -33,7 +31,6 @@ def get_region_info(s=None):
     json.dump(res, open('regions.json', 'w+'), indent=4)
     return True
 
-@baker.command
 def get_item_orders_in_region(item, region, s=None, order_type='sell'):
     """
     Get the given item orders in given region
@@ -55,7 +52,6 @@ def get_item_orders_in_region(item, region, s=None, order_type='sell'):
         res = r.json()
     return res
 
-@baker.command
 def get_system_name(system, s=None):
     """Returns the system name of given system id, None otherwise"""
     if s == None:
@@ -65,7 +61,3 @@ def get_system_name(system, s=None):
     if r.status_code == 200:
         res = r.json().get('name')
     return res
-
-if __name__ == "__main__":
-    # Only run CLI tasks if this file is invoked directly.
-    baker.run()
