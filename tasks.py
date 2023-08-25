@@ -7,15 +7,14 @@ import traceback
 from plyer import notification
 
 from market_monitor import get_item_orders_in_region, get_system_name
-import keys as k
 
-
-APP_TOKEN = k.APP_TOKEN
-USER_KEY  = k.USER_KEY
-# GROUP_KEY = k.GROUP_KEY
 
 TITLE = 'EVE Market Monitor'
 TARGETS_LST = 'targets.json'
+PUSHOVER_URL = 'https://api.pushover.net/1/messages.json'
+SETTINGS = json.load(open('appsettings.json', 'r', encoding='utf-8'))
+APP_TOKEN = SETTINGS['APP_TOKEN']
+USER_KEY  = SETTINGS['USER_KEY']
 REGIONS = json.load(open('regions.json', 'r', encoding='utf-8'))
 
 logging.basicConfig(format='%(asctime)s %(levelname)s\t%(message)s', level=logging.INFO)
@@ -73,7 +72,7 @@ def watch_market():
                     'message': msg,
                     'priority': 0,
                 }
-                r = s.post('https://api.pushover.net/1/messages.json', data=data)
+                r = s.post(PUSHOVER_URL, data=data)
                 if r.status_code != 200:
                     raise Exception(f'Status code {r.status_code}, {r.content}')
             except:
@@ -84,7 +83,8 @@ def watch_market():
 
 while True:
     try:
-        watch_market()
+        if SETTINGS['features_enabled']['market_monitor']:
+            watch_market()
     except Exception:
         logging.error('Unexpected error occurred during market watch:')
         traceback.print_exc()

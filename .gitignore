@@ -3,7 +3,7 @@ __pycache__/
 
 *.xlsx
 
+appsettings.json
 targets.json
-keys.py
 schema.yaml
 temp.*
