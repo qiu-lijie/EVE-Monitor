@@ -6,4 +6,4 @@ __pycache__/
 targets.json
 keys.py
 schema.yaml
-temp.py
+temp.*

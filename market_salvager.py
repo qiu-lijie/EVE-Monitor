@@ -55,14 +55,14 @@ for tar in TARGETS:
     )
     items += [{'type_id': tup[0], 'name': tup[1]} for tup in cur.fetchall()]
 
-logging.info(f'Requested for {len(items)} items')
+logging.info(f'Requested for {len(items)} items at {MARKET}')
 payload = {
     'market_name': MARKET,
     'items': items
 }
 res = requests.post(URL, data=json.dumps(payload))
 items = res.json()['appraisal']['items']
-logging.info(f'Recieve {len(items)} items in respond')
+logging.info(f'Receive {len(items)} items in respond')
 for item in items:
     type_id = item['typeID']
     name = item['typeName']
@@ -80,5 +80,5 @@ for item in items:
     base_value = sum([min_prices[tup[0]] * tup[1] if tup[0] in min_prices else 0 for tup in cur.fetchall()])
     value = base_value * REP_EFF
     if sell_price < value:
-        logging.info(f"{name} selling at {sell_price:,.0f} isk, has salavage value of {value:,.0f} isk is profitable!")
+        logging.info(f"{name} selling at {sell_price:,.0f} isk, has salvage value of {value:,.0f} isk is profitable!")
 
