@@ -20,7 +20,7 @@ order_id_seen = [] # TODO perhaps cache/store in file system?
 regions = json.load(open(REGIONS_LST))
 
 while True:
-    # load targets each iteration to allow chnages
+    # load targets each iteration to allow changes
     targets = json.load(open(TARGETS_LST))['market_monitor']
     s = requests.Session()
 
@@ -29,8 +29,8 @@ while True:
         res = []
         tid = t
         name = targets[t]['name']
-        thres = targets[t]['threshold']
-        logging.info(f'Looking for {name} below {thres:,} isk')
+        tres = targets[t]['threshold']
+        logging.info(f'Looking for {name} below {tres:,} isk')
 
         for r in regions:
             if not regions[r]['known_space']: continue
@@ -39,7 +39,7 @@ while True:
             if not orders: continue
             order_seen += len(orders)
             for o in orders:
-                if o['price'] <= thres and o['order_id'] not in order_id_seen:
+                if o['price'] <= tres and o['order_id'] not in order_id_seen:
                     order_id_seen.append(o['order_id'])
                     system = get_system_name(o['system_id'], s)
                     out = f"{name} selling for {o['price']:,.0f} isk in {system}, {regions[r]['name']}, {o['volume_remain']}/{o['volume_total']}"

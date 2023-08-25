@@ -1,6 +1,8 @@
 __pycache__/
 .vscode/
 
+*.xlsx
+
 targets.json
 keys.py
 schema.yaml
