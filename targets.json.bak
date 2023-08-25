@@ -1,0 +1,11 @@
+{
+    "market_monitor": {
+        "type_id": {
+            "name": "Display name",
+            "threshold": 0
+        }
+    },
+    "market_salvager": {
+        "type_id": "Display name"
+    }
+}
