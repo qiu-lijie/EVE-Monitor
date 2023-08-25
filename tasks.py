@@ -15,7 +15,7 @@ USER_KEY  = k.USER_KEY
 
 TITLE = 'EVE Market Monitor'
 TARGETS_LST = 'targets.json'
-REGIONS = json.load(open('regions.json', 'r', 'utf-8'))
+REGIONS = json.load(open('regions.json', 'r', encoding='utf-8'))
 
 logging.basicConfig(format='%(asctime)s %(levelname)s\t%(message)s', level=logging.INFO)
 
