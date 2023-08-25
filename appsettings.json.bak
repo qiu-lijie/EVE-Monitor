@@ -1,0 +1,9 @@
+{
+    "APP_TOKEN": "<Pushover app token>",
+    "USER_KEY": "<Pushover user key>",
+    "DB_PATH": "<Path to local db>",
+    "features_enabled": {
+        "market_monitor": false,
+        "contract_sniper": false
+    }
+}
