@@ -1,6 +1,7 @@
 import json
 import logging
 import requests
+import sys
 import time
 import traceback
 from plyer import notification
@@ -52,15 +53,19 @@ def watch_market():
             logging.warning(f'Done looking for {name}, no order found')
 
         for msg in res:
+            # desktop notification
             try:
-                # desktop notification
-                notification.notify(title=TITLE, message=msg, app_name=TITLE,)
+                if sys.platform.startswith('win'):
+                    notification.notify(title=TITLE, message=msg, app_name=TITLE,)
+                # TODO add mac support
+                else:
+                    logging.warning('No supported desktop notification implementation found')
             except:
                 logging.error('Unable to send desktop notification')
                 traceback.print_exc()
 
+            # pushover notification
             try:
-                # pushover notification
                 data = {
                     'token' : APP_TOKEN,
                     'user' : USER_KEY,
