@@ -12,6 +12,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s\t%(message)s', level=loggi
 
 s = requests.Session()
 FEATURES = SETTINGS['features_enabled']
+poll_rate = SETTINGS['poll_rate_in_min']
 while True:
     try:
         if FEATURES['market_monitor']:
@@ -28,4 +29,4 @@ while True:
         traceback.print_exc()
 
     logging.info('----sleep----')
-    time.sleep(60*5)
+    time.sleep(poll_rate * 60)
