@@ -3,7 +3,9 @@ import json
 import requests
 
 from .constants import ESI_URL, TARGETS_JSON, REGIONS
-from .notification import send_notification
+from .utils import get_module_name, send_notification
+
+MARKET_MONITOR = get_module_name(__name__)
 
 
 def get_region_info(s=None):
@@ -70,7 +72,7 @@ def get_system_name(system, s=None):
 order_id_seen = [] # TODO perhaps cache/store in file system?
 def watch_market(s: requests.Session):
     """watch market orders for items in TARGET_LIST.market_monitor"""
-    targets = json.load(open(TARGETS_JSON))['market_monitor']
+    targets = json.load(open(TARGETS_JSON))[MARKET_MONITOR]
 
     for type_id, type_info in targets.items():
         order_seen = 0
