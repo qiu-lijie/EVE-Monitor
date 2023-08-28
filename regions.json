@@ -334,6 +334,11 @@
         "region_id": 10000069,
         "known_space": true
     },
+    "10000070": {
+        "name": "Pochven",
+        "region_id": 10000070,
+        "known_space": true
+    },
     "11000001": {
         "name": "A-R00001",
         "region_id": 11000001,
@@ -524,9 +529,29 @@
         "region_id": 12000005,
         "known_space": false
     },
-    "13000001": {
-        "name": "PR-01",
-        "region_id": 13000001,
+    "14000001": {
+        "name": "VR-01",
+        "region_id": 14000001,
+        "known_space": false
+    },
+    "14000002": {
+        "name": "VR-02",
+        "region_id": 14000002,
+        "known_space": false
+    },
+    "14000003": {
+        "name": "VR-03",
+        "region_id": 14000003,
+        "known_space": false
+    },
+    "14000004": {
+        "name": "VR-04",
+        "region_id": 14000004,
+        "known_space": false
+    },
+    "14000005": {
+        "name": "VR-05",
+        "region_id": 14000005,
         "known_space": false
     }
 }
