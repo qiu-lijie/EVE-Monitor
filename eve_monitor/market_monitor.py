@@ -2,7 +2,7 @@ import logging
 import json
 import requests
 
-from .constants import ESI_URL, TARGETS_JSON, REGIONS
+from .constants import ESI_URL, TARGETS_JSON, REGIONS_JSON, REGIONS
 from .utils import get_module_name, send_notification
 
 MARKET_MONITOR = get_module_name(__name__)
@@ -27,12 +27,13 @@ def get_region_info(s=None):
         r = s.get(ESI_URL + f'/universe/regions/{rid}/')
         if r.status_code == 200:
             r = r.json()
-            res[rid] = {'name': r['name'],
-                        'region_id': r['region_id'],
-                        'known_space': True if r.get('description') else False,
-                        }
+            res[rid] = {
+                'name': r['name'],
+                'region_id': r['region_id'],
+                'known_space': True if r.get('description') else False,
+                }
 
-    json.dump(res, open('regions.json', 'w+'), indent=4)
+    json.dump(res, open(REGIONS_JSON, 'w+'), indent=4)
     return True
 
 
@@ -50,9 +51,8 @@ def get_item_orders_in_region(item, region, s=None, order_type='sell'):
     if s == None:
         s = requests.Session()
     res = None
-    r = s.get(ESI_URL + f'/markets/{region}/orders/',
-              params = {'type_id': item, 'order_type': order_type}
-              )
+    r = s.get(
+        ESI_URL + f'/markets/{region}/orders/', params = {'type_id': item, 'order_type': order_type})
     if r.status_code == 200:
         res = r.json()
     return res
@@ -71,7 +71,8 @@ def get_system_name(system, s=None):
 
 order_id_seen = [] # TODO perhaps cache/store in file system?
 def watch_market(s: requests.Session):
-    """watch market orders for items in TARGET_LIST.market_monitor"""
+    """watch market orders for items in TARGETS.market_monitor"""
+    # load each time to enable hot reload
     targets = json.load(open(TARGETS_JSON))[MARKET_MONITOR]
 
     for type_id, type_info in targets.items():
