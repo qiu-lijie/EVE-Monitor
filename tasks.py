@@ -9,7 +9,7 @@ import traceback
 
 from eve_monitor.constants import SETTINGS
 from eve_monitor.contract_sniper import watch_contract
-from eve_monitor.market_monitor import watch_market
+from eve_monitor.market_monitor import MARKET_MONITOR, watch_market
 
 
 logging.basicConfig(format='%(asctime)s %(levelname)s\t%(message)s', level=logging.INFO)
@@ -43,7 +43,7 @@ FEATURES = SETTINGS['features_enabled']
 poll_rate = SETTINGS['poll_rate_in_min']
 while True:
     try:
-        if FEATURES['market_monitor']:
+        if FEATURES[MARKET_MONITOR]:
             watch_market(s, file_cache)
     except:
         logging.error('Unexpected error occurred during market watch:')

@@ -72,15 +72,18 @@ def get_system_name(system, s=None):
 local_cache = []
 def watch_market(s: requests.Session, cache: {str: [str]} = None):
     """watch market orders for items in TARGETS.market_monitor"""
-    if cache != None and MARKET_MONITOR in cache:
+    if cache == None:
+        order_ids_seen = local_cache
+    elif MARKET_MONITOR in cache:
         order_ids_seen = cache[MARKET_MONITOR]
     else:
+        cache[MARKET_MONITOR] = local_cache
         order_ids_seen = local_cache
     # load each time to enable hot reload
     targets = json.load(open(TARGETS_JSON))[MARKET_MONITOR]
 
     for type_id, type_info in targets.items():
-        order_seen = 0
+        orders_seen = 0
         res = []
         name = type_info['name']
         tres = type_info['threshold']
@@ -91,7 +94,7 @@ def watch_market(s: requests.Session, cache: {str: [str]} = None):
             rid = REGIONS[r]['region_id']
             orders = get_item_orders_in_region(type_id, rid, s)
             if not orders: continue
-            order_seen += len(orders)
+            orders_seen += len(orders)
             for o in orders:
                 if o['price'] <= tres and o['order_id'] not in order_ids_seen:
                     order_ids_seen.append(o['order_id'])
@@ -100,7 +103,7 @@ def watch_market(s: requests.Session, cache: {str: [str]} = None):
                     logging.info(out)
                     res.append(out)
 
-        if order_seen == 0:
+        if orders_seen == 0:
             logging.warning(f'Done looking for {name}, no order found')
 
         for msg in res:
