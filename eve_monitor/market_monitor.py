@@ -82,11 +82,12 @@ def watch_market(s: requests.Session, cache: {str: [str]} = None):
     # load each time to enable hot reload
     targets = json.load(open(TARGETS_JSON))[MARKET_MONITOR]
 
-    for type_id, type_info in targets.items():
+    for target in targets:
         orders_seen = 0
         res = []
-        name = type_info['name']
-        tres = type_info['threshold']
+        type_id = target['type_id']
+        name = target['name']
+        tres = target['threshold']
         logging.info(f'Looking for {name} below {tres:,} isk')
 
         for r in REGIONS:

@@ -1,11 +1,15 @@
 {
-    "market_monitor": {
-        "type_id": {
+    "market_monitor": [
+        {
+            "type_id": 0,
             "name": "Display name",
             "threshold": 0
         }
-    },
-    "market_salvager": {
-        "type_id": "Display name"
-    }
+    ],
+    "market_salvager": [
+        {
+            "type_id": 0,
+            "name": "Display name"
+        }
+    ]
 }
