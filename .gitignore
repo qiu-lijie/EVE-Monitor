@@ -4,6 +4,7 @@ __pycache__/
 *.xlsx
 
 appsettings.json
+cache.json
 targets.json
 schema.yaml
 temp.*

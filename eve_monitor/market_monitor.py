@@ -31,9 +31,9 @@ def get_region_info(s=None):
                 'name': r['name'],
                 'region_id': r['region_id'],
                 'known_space': True if r.get('description') else False,
-                }
+            }
 
-    json.dump(res, open(REGIONS_JSON, 'w+'), indent=4)
+    json.dump(res, open(REGIONS_JSON, 'w+', encoding='utf-8', newline='\n'), indent=4)
     return True
 
 
@@ -69,9 +69,13 @@ def get_system_name(system, s=None):
     return res
 
 
-order_id_seen = [] # TODO perhaps cache/store in file system?
-def watch_market(s: requests.Session):
+local_cache = []
+def watch_market(s: requests.Session, cache: {str: [str]} = None):
     """watch market orders for items in TARGETS.market_monitor"""
+    if cache != None and MARKET_MONITOR in cache:
+        order_ids_seen = cache[MARKET_MONITOR]
+    else:
+        order_ids_seen = local_cache
     # load each time to enable hot reload
     targets = json.load(open(TARGETS_JSON))[MARKET_MONITOR]
 
@@ -89,8 +93,8 @@ def watch_market(s: requests.Session):
             if not orders: continue
             order_seen += len(orders)
             for o in orders:
-                if o['price'] <= tres and o['order_id'] not in order_id_seen:
-                    order_id_seen.append(o['order_id'])
+                if o['price'] <= tres and o['order_id'] not in order_ids_seen:
+                    order_ids_seen.append(o['order_id'])
                     system = get_system_name(o['system_id'], s)
                     out = f"{name} selling for {o['price']:,.0f} isk in {system}, {REGIONS[r]['name']}, {o['volume_remain']}/{o['volume_total']}"
                     logging.info(out)
