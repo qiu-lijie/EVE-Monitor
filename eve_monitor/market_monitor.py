@@ -1,5 +1,6 @@
-import logging
 import json
+import logging
+import operator
 import requests
 
 from .constants import ESI_URL, TARGETS_JSON, REGIONS_JSON, REGIONS
@@ -22,16 +23,16 @@ def get_region_info(s=None):
     if r.status_code != 200:
         return False
     
-    res = {}
+    res = []
     for rid in r.json():
         r = s.get(ESI_URL + f'/universe/regions/{rid}/')
         if r.status_code == 200:
             r = r.json()
-            res[rid] = {
+            res.append({
                 'name': r['name'],
                 'region_id': r['region_id'],
                 'known_space': True if r.get('description') else False,
-            }
+            })
 
     json.dump(res, open(REGIONS_JSON, 'w+', encoding='utf-8', newline='\n'), indent=4)
     return True
@@ -90,17 +91,18 @@ def watch_market(s: requests.Session, cache: {str: [str]} = None):
         tres = target['threshold']
         logging.info(f'Looking for {name} below {tres:,} isk')
 
-        for r in REGIONS:
-            if not REGIONS[r]['known_space']: continue
-            rid = REGIONS[r]['region_id']
-            orders = get_item_orders_in_region(type_id, rid, s)
+        for region in REGIONS:
+            (region_name, region_id, known_space) = operator.itemgetter('name', 'region_id', 'known_space')(region)
+            if not known_space: continue
+
+            orders = get_item_orders_in_region(type_id, region_id, s)
             if not orders: continue
             orders_seen += len(orders)
             for o in orders:
                 if o['price'] <= tres and o['order_id'] not in order_ids_seen:
                     order_ids_seen.append(o['order_id'])
                     system = get_system_name(o['system_id'], s)
-                    out = f"{name} selling for {o['price']:,.0f} isk in {system}, {REGIONS[r]['name']}, {o['volume_remain']}/{o['volume_total']}"
+                    out = f"{name} selling for {o['price']:,.0f} isk in {system}, {region_name}, {o['volume_remain']}/{o['volume_total']}"
                     logging.info(out)
                     res.append(out)
 
