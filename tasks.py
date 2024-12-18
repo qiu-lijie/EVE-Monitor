@@ -55,6 +55,7 @@ while True:
     except:
         logging.error('Unexpected error occurred during contract watch:')
         traceback.print_exc()
+        input('Press any keys to exit')
 
     logging.info('----sleep----')
     time.sleep(poll_rate * 60)

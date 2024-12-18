@@ -1,7 +1,10 @@
 __pycache__/
 .vscode/
+build/
+dist/
 
 *.xlsx
+*.spec
 
 appsettings.json
 cache.json

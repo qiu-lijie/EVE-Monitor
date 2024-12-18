@@ -12,3 +12,5 @@ REGIONS = json.load(open(REGIONS_JSON, 'r', encoding='utf-8'))
 SETTINGS = json.load(open('appsettings.json', 'r', encoding='utf-8'))
 APP_TOKEN = SETTINGS['APP_TOKEN']
 USER_KEY  = SETTINGS['USER_KEY']
+DESKTOP_NOTIFICATION = SETTINGS.get('DESKTOP_NOTIFICATION', True)
+PUSHOVER_NOTIFICATION = SETTINGS.get('PUSHOVER_NOTIFICATION', True)
